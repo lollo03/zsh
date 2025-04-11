@@ -75,7 +75,8 @@ alias gs="git status"
 alias ga="git add -A"
 alias gc="git commit"
 alias gp="git push origin master"
-
+#others
+alias ssh="kitten ssh"
 
 # lfs
 export LFS=/mnt/lfs
