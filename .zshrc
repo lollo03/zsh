@@ -28,6 +28,11 @@ if [[ ! -e ~/.config/zsh/fzf-tab ]]; then
   git clone https://github.com/Aloxaf/fzf-tab ~/.config/zsh/fzf-tab
 fi
 
+# zsh you-should-use
+if [[ ! -e ~/.config/zsh/you-should-use ]]; then
+  git clone https://github.com/MichaelAquilina/zsh-you-should-use.git  ~/.config/zsh/you-should-use
+fi
+
 # Activate Powerlevel10k Instant Prompt.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -112,7 +117,7 @@ source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.config/zsh/powerlevel10k/powerlevel10k.zsh-theme
 source ~/.p10k.zsh
 source ~/.config/zsh/kubectl.zsh
-source ~/.config/zsh/hugo.zsh
+source ~/.config/zsh/you-should-use/you-should-use.plugin.zsh
 #source ~/.kbd.zsh
 source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
