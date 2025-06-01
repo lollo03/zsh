@@ -28,12 +28,6 @@ if [[ ! -e ~/.config/zsh/fzf-tab ]]; then
   git clone https://github.com/Aloxaf/fzf-tab ~/.config/zsh/fzf-tab
 fi
 
-# zsh omz git
-if [[ ! -e ~/.config/zsh/git.zsh ]]; then
-  curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/refs/heads/master/plugins/git/git.plugin.zsh > ~/.config/zsh/git.zsh
-fi
-
-
 # Activate Powerlevel10k Instant Prompt.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -43,16 +37,15 @@ fi
 unfunction zcompile-many
 
 
-# copy .zshrc in directory
-
-cp ~/.zshrc ~/.config/zsh/zshrc
-
 # history file
 export HISTFILE=~/.zsh_history
 export HISTSIZE=5000
 export SAVEHIST=$HISTSIZE
 export KUBECONFIG=/home/lollo/.kube/config
 export EDITOR=nvim
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export ANSIBLE_COW_SELECTION=tux
 bindkey -e
 
 
@@ -71,33 +64,31 @@ setopt SHARE_HISTORY             # Share history between all sessions.
 # aliases
 alias c="clear"
 alias duu="du --max-depth=1 -h"
-alias l="eza -ahl"
-alias ls="eza"
+alias l="eza -ahl --icons"
+alias ls="eza --icons"
+alias ll="eza --icons -a"
 alias lsblk="lsblk -o NAME,FSTYPE,SIZE,FSUSED,LABEL,MOUNTPOINT,RM,RO,UUID"
 alias tree='tree -a -I .git'
-alias k=kubectl
 # alias v="nvim"
-
+alias rm=trash
 # git
 alias g="git"
 alias gs="git status"
 alias ga="git add -A"
 alias gc="git commit"
 alias gp="git push origin master"
-
+#others
+alias ssh="kitten ssh"
 
 # lfs
 export LFS=/mnt/lfs
 
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-path=('/home/leo/.local/bin' $path)
-path=('/home/leo/ardu/ardupilot/Tools/autotest' $path)
+path=('/home/lollo/.local/bin' $path)
 path=('/usr/lib/ccache/bin' $path)
-
 # export to sub-processes (make it inherited by child processes)
 export PATH
-
+export PATH="/usr/sbin:$PATH"
 
 # fzf
 # Set up fzf key bindings and fuzzy completion
@@ -123,9 +114,11 @@ source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.config/zsh/powerlevel10k/powerlevel10k.zsh-theme
 source ~/.p10k.zsh
 source ~/.config/zsh/kubectl.zsh
-source ~/.config/zsh/git.zsh
 #source ~/.kbd.zsh
 source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 
 # functions
 function pomo() {
@@ -151,4 +144,28 @@ function v(){
     nvim "$1"
   fi
 }
+
+
+# kubernets stuff
+
+if [[ -x "$(command -v kubectl)" ]]; then
+  alias k=kubectl
+  
+  # autogenerate composed kubeconfig
+  if [[ ! -f "$HOME/.kube/config" ]]; then
+    for file in "$HOME/.kube/config.d/"*(N); do
+      export KUBECONFIG="$KUBECONFIG:$file"
+    done
+
+    if [[ ! -z "$KUBECONFIG" ]]; then
+      kubectl config view --flatten > "$HOME/.kube/config"
+      chmod 600 "$HOME/.kube/config"
+    fi
+  fi
+
+  [[ -f "$HOME/.kube/config" ]] && export KUBECONFIG="$HOME/.kube/config"
+fi
+
+# krew
+[[ $(command -v kubectl) ]] && [[ -d $HOME/.krew/bin ]] && path+=$HOME/.krew/bin
 
