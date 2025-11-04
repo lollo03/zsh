@@ -69,7 +69,6 @@ alias ls="eza --icons"
 alias ll="eza --icons -a"
 alias lsblk="lsblk -o NAME,FSTYPE,SIZE,FSUSED,LABEL,MOUNTPOINT,RM,RO,UUID"
 alias tree='tree -a -I .git'
-# alias v="nvim"
 alias rm=trash
 # git
 alias g="git"
@@ -79,7 +78,7 @@ alias gc="git commit"
 alias gp="git push origin master"
 #others
 alias ssh="kitten ssh"
-
+alias t="tailscale"
 # lfs
 export LFS=/mnt/lfs
 
@@ -115,7 +114,9 @@ source ~/.config/zsh/powerlevel10k/powerlevel10k.zsh-theme
 source ~/.p10k.zsh
 source ~/.config/zsh/kubectl.zsh
 #source ~/.kbd.zsh
+source ~/.config/zsh/flux.sh
 source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
